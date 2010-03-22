@@ -1,4 +1,4 @@
-(ns sicp-clj.ch1)
+(ns sicp.ch1.ch1_1)
 
 (defn square [x] (* x x))
 

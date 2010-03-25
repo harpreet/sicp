@@ -248,17 +248,17 @@ user> (sqrt 81)
     (cubert-iter new-guess (improve new-guess x)
 		 x)))
 
-(defn cubert [x]
+(defn cuberoot [x]
   (cubert-iter x 1.0 x))
 
-user> (cubert (cube 2))
+user> (cuberoot (cube 2))
 2.000000000012062
-user> (cubert (cube 10))
+user> (cuberoot (cube 10))
 10.000000000000002
-user> (cubert (cube 9))
+user> (cuberoot (cube 9))
 9.000000000053902
-user> (cubert (cube 0.001))
+user> (cuberoot (cube 0.001))
 0.001000000000000962
-user> (cubert (cube 0.0001))
+user> (cuberoot (cube 0.0001))
 1.000000000000001E-4
-user> 
+user>

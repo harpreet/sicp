@@ -1,1 +1,2 @@
-This is the namespace for SICP examples, exercises and problems.
+This is the namespace for SICP examples, exercises and problems. To
+use these programs, add the parent directory of this repo to your classpath.

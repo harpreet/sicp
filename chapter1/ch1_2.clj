@@ -1,5 +1,5 @@
 (ns sicp.chapter1.ch1_2
-  (:use (clojure.contrib trace)))
+  (:use (clojure.contrib trace math)))
 
 
 (defn factorial [n]
@@ -198,6 +198,7 @@ user> (A 3 3)
 	(= kinds-of-coins 3) 10
 	(= kinds-of-coins 4) 25
 	(= kinds-of-coins 5) 50))
+
 (defn first-denomination [kinds-of-coins]
   ({1 1 2 5 3 10 4 25 5 50} kinds-of-coins))
 
@@ -245,6 +246,207 @@ user> (map f (range 10))
 	      res
 	      prev0
 	      prev1))))
+
+;; exercise 1.12.  The following pattern of numbers is called Pascal's triangle.
+;;          1
+;;        1   1
+;;      1   2   1
+;;    1   3   3   1
+;;  1   4   6   4   1
+;; ...................
+;;
+;;                 The numbers at the edge of the triangle are all 1, and each
+;;                 number inside the triangle is the sum of the two numbers above
+;;                 it. Write a procedure that computes elements of Pascal's triangle
+;;                 by means of a recursive process. 
+(defn pascal [row col]
+  (when (<= col row)
+    (if (or (= col 0) (= row col))
+      1
+      (+ (pascal (dec row) col)
+	 (pascal (dec row) (dec col))))))
+
+;; exercise 1.13:
+(comment
+See the pdfs in the directory for the answers.
+)
+
+;; ex 1.13 (contd)
+(defn fib-approx [n]
+  (let [phi (/ (+ 1 (sqrt 5)) 2)]
+    (/ (expt phi n) (sqrt 5))))
+
+(comment
+user> (map fib-approx (range 10))
+(0.4472135954999579 0.7236067977499789 1.1708203932499368 1.8944271909999157 3.065247584249853 4.959674775249769 8.024922359499623 12.984597134749393 21.009519494249016 33.99411662899841)
+)
+
+;; exercise 1.14: tree of (count-changes 11)
+(comment
+  See the pdf for the tree representation.
+)
+
+
+;; order of size and computation
+;; see PDF, but below is the trace tree.
+(comment
+user> (use 'clojure.contrib.trace)
+nil
+user> (dotrace [count-change cc] (count-change 11))
+TRACE t2609: (count-change 11)
+TRACE t2610: |    (cc 11 5)
+TRACE t2611: |    |    (cc 11 4)
+TRACE t2612: |    |    |    (cc 11 3)
+TRACE t2613: |    |    |    |    (cc 11 2)
+TRACE t2614: |    |    |    |    |    (cc 11 1)
+TRACE t2615: |    |    |    |    |    |    (cc 11 0)
+TRACE t2615: |    |    |    |    |    |    => 0
+TRACE t2616: |    |    |    |    |    |    (cc 10 1)
+TRACE t2617: |    |    |    |    |    |    |    (cc 10 0)
+TRACE t2617: |    |    |    |    |    |    |    => 0
+TRACE t2618: |    |    |    |    |    |    |    (cc 9 1)
+TRACE t2619: |    |    |    |    |    |    |    |    (cc 9 0)
+TRACE t2619: |    |    |    |    |    |    |    |    => 0
+TRACE t2620: |    |    |    |    |    |    |    |    (cc 8 1)
+TRACE t2621: |    |    |    |    |    |    |    |    |    (cc 8 0)
+TRACE t2621: |    |    |    |    |    |    |    |    |    => 0
+TRACE t2622: |    |    |    |    |    |    |    |    |    (cc 7 1)
+TRACE t2623: |    |    |    |    |    |    |    |    |    |    (cc 7 0)
+TRACE t2623: |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2624: |    |    |    |    |    |    |    |    |    |    (cc 6 1)
+TRACE t2625: |    |    |    |    |    |    |    |    |    |    |    (cc 6 0)
+TRACE t2625: |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2626: |    |    |    |    |    |    |    |    |    |    |    (cc 5 1)
+TRACE t2627: |    |    |    |    |    |    |    |    |    |    |    |    (cc 5 0)
+TRACE t2627: |    |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2628: |    |    |    |    |    |    |    |    |    |    |    |    (cc 4 1)
+TRACE t2629: |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 4 0)
+TRACE t2629: |    |    |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2630: |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 3 1)
+TRACE t2631: |    |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 3 0)
+TRACE t2631: |    |    |    |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2632: |    |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 2 1)
+TRACE t2633: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 2 0)
+TRACE t2633: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2634: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 1 1)
+TRACE t2635: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 1 0)
+TRACE t2635: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2636: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    (cc 0 1)
+TRACE t2636: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2634: |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2632: |    |    |    |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2630: |    |    |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2628: |    |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2626: |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2624: |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2622: |    |    |    |    |    |    |    |    |    => 1
+TRACE t2620: |    |    |    |    |    |    |    |    => 1
+TRACE t2618: |    |    |    |    |    |    |    => 1
+TRACE t2616: |    |    |    |    |    |    => 1
+TRACE t2614: |    |    |    |    |    => 1
+TRACE t2637: |    |    |    |    |    (cc 6 2)
+TRACE t2638: |    |    |    |    |    |    (cc 6 1)
+TRACE t2639: |    |    |    |    |    |    |    (cc 6 0)
+TRACE t2639: |    |    |    |    |    |    |    => 0
+TRACE t2640: |    |    |    |    |    |    |    (cc 5 1)
+TRACE t2641: |    |    |    |    |    |    |    |    (cc 5 0)
+TRACE t2641: |    |    |    |    |    |    |    |    => 0
+TRACE t2642: |    |    |    |    |    |    |    |    (cc 4 1)
+TRACE t2643: |    |    |    |    |    |    |    |    |    (cc 4 0)
+TRACE t2643: |    |    |    |    |    |    |    |    |    => 0
+TRACE t2644: |    |    |    |    |    |    |    |    |    (cc 3 1)
+TRACE t2645: |    |    |    |    |    |    |    |    |    |    (cc 3 0)
+TRACE t2645: |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2646: |    |    |    |    |    |    |    |    |    |    (cc 2 1)
+TRACE t2647: |    |    |    |    |    |    |    |    |    |    |    (cc 2 0)
+TRACE t2647: |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2648: |    |    |    |    |    |    |    |    |    |    |    (cc 1 1)
+TRACE t2649: |    |    |    |    |    |    |    |    |    |    |    |    (cc 1 0)
+TRACE t2649: |    |    |    |    |    |    |    |    |    |    |    |    => 0
+TRACE t2650: |    |    |    |    |    |    |    |    |    |    |    |    (cc 0 1)
+TRACE t2650: |    |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2648: |    |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2646: |    |    |    |    |    |    |    |    |    |    => 1
+TRACE t2644: |    |    |    |    |    |    |    |    |    => 1
+TRACE t2642: |    |    |    |    |    |    |    |    => 1
+TRACE t2640: |    |    |    |    |    |    |    => 1
+TRACE t2638: |    |    |    |    |    |    => 1
+TRACE t2651: |    |    |    |    |    |    (cc 1 2)
+TRACE t2652: |    |    |    |    |    |    |    (cc 1 1)
+TRACE t2653: |    |    |    |    |    |    |    |    (cc 1 0)
+TRACE t2653: |    |    |    |    |    |    |    |    => 0
+TRACE t2654: |    |    |    |    |    |    |    |    (cc 0 1)
+TRACE t2654: |    |    |    |    |    |    |    |    => 1
+TRACE t2652: |    |    |    |    |    |    |    => 1
+TRACE t2655: |    |    |    |    |    |    |    (cc -4 2)
+TRACE t2655: |    |    |    |    |    |    |    => 0
+TRACE t2651: |    |    |    |    |    |    => 1
+TRACE t2637: |    |    |    |    |    => 2
+TRACE t2613: |    |    |    |    => 3
+TRACE t2656: |    |    |    |    (cc 1 3)
+TRACE t2657: |    |    |    |    |    (cc 1 2)
+TRACE t2658: |    |    |    |    |    |    (cc 1 1)
+TRACE t2659: |    |    |    |    |    |    |    (cc 1 0)
+TRACE t2659: |    |    |    |    |    |    |    => 0
+TRACE t2660: |    |    |    |    |    |    |    (cc 0 1)
+TRACE t2660: |    |    |    |    |    |    |    => 1
+TRACE t2658: |    |    |    |    |    |    => 1
+TRACE t2661: |    |    |    |    |    |    (cc -4 2)
+TRACE t2661: |    |    |    |    |    |    => 0
+TRACE t2657: |    |    |    |    |    => 1
+TRACE t2662: |    |    |    |    |    (cc -9 3)
+TRACE t2662: |    |    |    |    |    => 0
+TRACE t2656: |    |    |    |    => 1
+TRACE t2612: |    |    |    => 4
+TRACE t2663: |    |    |    (cc -14 4)
+TRACE t2663: |    |    |    => 0
+TRACE t2611: |    |    => 4
+TRACE t2664: |    |    (cc -39 5)
+TRACE t2664: |    |    => 0
+TRACE t2610: |    => 4
+TRACE t2609: => 4
+4  
+)
+;; TODO: orders of growth in space and number of steps.
+
+
+;; exercise 1.15: sin (x) calculation
+;;    a.  How many times is the procedure p applied when (sine 12.15)
+;;        is evaluated?
+;;    b.  What is the order of growth in space and number of steps (as
+;;        a function of a) used by the process generated by the sine
+;;        procedure when (sine a) is evaluated?
+(defn cube [x] (* x x x))
+
+(defn p [x] (- (* 3 x) (* 4 (cube x))))
+
+(defn sine [angle]
+  (if (not (> (abs angle) 0.1))
+    angle
+    (p (sine (/ angle 3.0)))))
+
+;; solution to (a) => 5
+(comment
+user> (dotrace [p] (sine 12.15))
+TRACE t2490: (p 0.049999999999999996)
+TRACE t2490: => 0.1495
+TRACE t2491: (p 0.1495)
+TRACE t2491: => 0.4351345505
+TRACE t2492: (p 0.4351345505)
+TRACE t2492: => 0.9758465331678772
+TRACE t2493: (p 0.9758465331678772)
+TRACE t2493: => -0.7895631144708228
+TRACE t2494: (p -0.7895631144708228)
+TRACE t2494: => -0.39980345741334
+-0.39980345741334
+)
+
+;; solution to b
+;; both space and number of steps grows as log3(a) -> log a to the base 3.
+;;
+;; proof:
+;;   a * (1/3)^n <= 0.1
+;;   => take log to the base 3 on both the sides.
 
 ;; 1.2.4: exponentiation
 ;; computing b^n

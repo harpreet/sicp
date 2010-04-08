@@ -1,2 +1,11 @@
-This is the namespace for SICP examples, exercises and problems. To
+This is the repository for SICP examples, exercises and problem sets. To
 use these programs, add the parent directory of this repo to your classpath.
+
+See: <http://www.zerobeat.in/2010/03/14/sicp-study/>
+for background and other information.
+
+
+TODO:
+
+1. make it a lein project.
+2. scan non-programming exercise/solutions and put it as jpg/pdfs.

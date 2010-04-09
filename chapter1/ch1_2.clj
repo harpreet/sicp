@@ -478,3 +478,16 @@ TRACE t2494: => -0.39980345741334
 
 (defn even? [x]
   (= (rem x 2) 0))
+
+(defn square [x]
+  (* x x))
+
+;; exercise 1.16:
+(defn expt [b n]
+  (expt-iter b n 1))
+
+(defn expt-iter [b n a]
+  (cond (= n 0) a
+	(even? n) (expt-iter (square b) (/ n 2) a)
+	:else (expt-iter b (- n 1) (* a b))))
+

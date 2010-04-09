@@ -448,6 +448,10 @@ TRACE t2494: => -0.39980345741334
 ;;   a * (1/3)^n <= 0.1
 ;;   => take log to the base 3 on both the sides.
 
+;; Note: Finding the order of space in a recursive process is sort of, equiv
+;;       to finding the number of deferred operations. Which is in-turn the
+;;       same as the depth of the evaluation tree.
+
 ;; 1.2.4: exponentiation
 ;; computing b^n
 (defn expt [b n]

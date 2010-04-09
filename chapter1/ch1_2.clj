@@ -491,3 +491,23 @@ TRACE t2494: => -0.39980345741334
 	(even? n) (expt-iter (square b) (/ n 2) a)
 	:else (expt-iter b (- n 1) (* a b))))
 
+;; exercise 1.17:
+(defn mult [a b]
+  (if (= b 0)
+    0
+    (+ a (mult a (- b 1)))))
+
+;; product = 2 * (a * (b/2)) for even b
+;;         = a    + (a * (b - 1)) for odd b
+(defn fast-mult [a b]
+  (cond (= b 0) 0
+	(= b 1) a
+	(even? b) (twice (fast-mult a (half b)))
+	:else (+ a (fast-mult a (- b 1)))))
+
+;; double
+(defn twice [x]
+  (* 2 x))
+
+(defn half [x]
+  (/ x 2))

@@ -536,3 +536,22 @@ TRACE t2916: |    => 6
 TRACE t2915: => 6
 6
 )
+
+;; exercise 1.19: fast fibonacci
+;; see the pdf of the notebook scan for the derivation of p' and q'
+(defn ffib [n]
+  (ffib-iter 1 0 0 1 n))
+
+(defn ffib-iter [a b p q count]
+  (cond (= count 0) b
+	(even? count)
+	(ffib-iter a
+		   b
+		   (+ (* p p) (* q q))
+		   (+ (* 2 p q) (* q q))
+		   (/ count 2))
+	:else (ffib-iter (+ (* b q) (* a q) (* a p))
+			 (+ (* b p) (* a q))
+			 p
+			 q
+			 (- count 1))))

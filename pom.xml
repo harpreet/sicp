@@ -26,7 +26,7 @@
         </executions>
         <configuration>
           <sourceDirectories>
-            <sourceDirectory>src/main/clojure</sourceDirectory>
+            <sourceDirectory>src</sourceDirectory>
           </sourceDirectories>
         </configuration>
       </plugin>

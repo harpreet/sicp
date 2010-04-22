@@ -557,3 +557,8 @@ See the pdfs in the directory for the answers.
 (defn ffib [n]
   (ffib-iter 1 0 0 1 n))
 
+;;;  Section 1.2.5: GCD
+(defn mygcd [a b]
+  (if (= b 0)
+    a
+    (mygcd b (rem a b))))

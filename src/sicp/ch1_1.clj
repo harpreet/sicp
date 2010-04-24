@@ -1,17 +1,11 @@
-(ns sicp.ch1-1)
-
-(defn square [x] (* x x))
+(ns sicp.ch1-1
+  (:use sicp.utils))
 
 (defn sum-of-squares [x y]
   (+ (square x) (square y)))
 
-(defn f [a]
+(defn ff [a]
   (sum-of-squares (+ a 1) (* a 2)))
-
-(defn abs
-  "find absolute value of x"
-  [x]
-  (if (< x 0) (- x) x))
 
 (defn abs1 [x]
   (cond (< x 0) (- x)
@@ -114,7 +108,7 @@
   (average guess (/ x guess)))
 
 (defn good-enough? [guess x]
-  (< (abs (- (square guess) x)) 0.001))
+  (< (myabs (- (square guess) x)) 0.001))
 
 (defn sqrt-iter [guess x]
   (if (good-enough? guess x)
@@ -217,7 +211,7 @@
   (/ (+ x y) 2))
 
 (defn good-enough? [old-guess new-guess x]
-  (< (/ (abs (- new-guess old-guess)) new-guess) 0.0001))
+  (< (/ (myabs (- new-guess old-guess)) new-guess) 0.0001))
 
 (defn sqrt [x]
   (sqrt-iter x 1.0 x))
@@ -248,9 +242,6 @@ user> (sqrt 81)
 9.000000000007091
 )
 ;; exercise 1.8: cube root
-(defn cube [x]
-  (* x x x))
-
 (defn improve [guess x]
   (/ (+ (/ x (square guess)) (* 2 guess)) 3))
 
@@ -291,7 +282,7 @@ user>
   (/ (+ x y) 2))
 
 (defn- good-enough? [guess x]
-  (< (abs (- (square guess) x)) 0.001))
+  (< (myabs (- (square guess) x)) 0.001))
 
 (defn sqrt [x]
   (sqrt-iter 1.0 x))

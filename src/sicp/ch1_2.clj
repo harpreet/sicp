@@ -761,3 +761,59 @@ Average      :  0.021450125000000004
 )
 
 ;; exercise 1.27
+(comment
+  "Some notes on Carmichael numbers: Carmichael numbers are those that fail
+   Fermat little test. That is, for any n in the Carmichael set,
+   (prime? n)      => false
+   (fermat-test n) => true."
+  )
+(defn brute-force-fermat-test [n]
+  (try-all 2 n))
+
+(defn try-all [a n]
+  (cond (= a n) true
+	(try-it a n) (try-all (inc a) n)
+	:else false))
+(comment
+  "all the given numbers pass the above test, i.e. for every a < n,
+   a^n mod n === a mod n"
+  user> (brute-force-fermat-test 561)
+  true
+  user> (brute-force-fermat-test 1105)
+  true
+  user> (brute-force-fermat-test 1729)
+  true
+  user> (brute-force-fermat-test 2465)
+  true
+  user> (brute-force-fermat-test 2821)
+  true
+  user> (brute-force-fermat-test 6601)
+  true
+  )
+
+;;; exercise 1.28
+(defn expmod2 [base exp m]
+  (cond (= exp 0) 1
+	(even? exp) (square-test (expmod2 base (/ exp 2) m) m)
+	:else (rem (* base (expmod2 base (dec exp) m))
+		   m)))
+
+(defn square-test [x m]
+  (if (and (not (or (= x 1) (= x (- m 1))))
+	   (= (rem (square x) m) 1))
+    0
+    (rem (square x) m)))
+
+(defn miller-rabin-test [n]
+  (try-it (+ 2 (rand-int (- n 2)))
+	  n))
+
+(defn try-it [a n]
+  (= (expmod2 a (- n 1) n) 1))
+
+(comment
+  "If the random number generated (a) is 1, then this returns false
+   positives. So generate random numbers between 2 and n-1. (is this
+   assumption correct?) "
+  
+  )

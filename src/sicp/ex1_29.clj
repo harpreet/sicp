@@ -22,4 +22,5 @@
     (* (/ h 3.0)
        (sum simp-term 0 inc n))))
 
-;;; lots of great ideas in the above exercise.
+;;; lots of great ideas in the above exercise. lexical closures make it easy to
+;;; implement as a and b are constants.

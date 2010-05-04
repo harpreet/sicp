@@ -3,12 +3,6 @@
 	[clojure.contrib trace test-is]))
 
 ;; simpson's rule of integration
-(defn sum [term a next b]
-  (if (> a b)
-    0
-    (+ (term a)
-       (sum term (next a) next b))))
-
 (defn make-fac [k n]
   (cond (= k 0) 1
 	(= k n) 1

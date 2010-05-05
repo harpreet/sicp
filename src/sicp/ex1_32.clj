@@ -22,6 +22,12 @@
     result
     (iter combiner null-value term (next a) next b (combiner (term a) result))))
 
+(def isum (fn [a b] (iaccumulate + 0 identity a inc b)))
+
+(def isum-cube (fn [a b] (iaccumulate + 0 cube a inc b)))
+
+(def iprod (fn [a b] (iaccumulate * 1 identity a inc b)))
+
 (deftest test-sum-of-integers-from-1-to-10
   (is (= (sum 1 10) (reduce + (range 1 11)))))
 
@@ -30,12 +36,6 @@
 
 (deftest test-prod-of-ints-from-1-to-10
   (is (= (prod 1 10) (reduce * (range 1 11)))))
-
-(def isum (fn [a b] (iaccumulate + 0 identity a inc b)))
-
-(def isum-cube (fn [a b] (iaccumulate + 0 cube a inc b)))
-
-(def iprod (fn [a b] (iaccumulate * 1 identity a inc b)))
 
 (deftest test-isum-of-integers-from-1-to-10
   (is (= (isum 1 10) (reduce + (range 1 11)))))

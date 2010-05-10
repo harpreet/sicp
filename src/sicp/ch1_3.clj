@@ -1,5 +1,4 @@
-
-(ns sicp.ch1-3
+(ns sicp.ch1_3
   (:use [sicp utils]
 	[clojure.contrib test-is]))
 
@@ -41,3 +40,56 @@
 ;;=>0.249999875000001
 (integral cube 0 1 0.005)
 ;;=>0.24999687500000028
+
+;; section 1.3.3
+(defn close-enough? [x y tolerance]
+  (< (abs (- x y)) tolerance))
+
+(defn search [f neg-point pos-point]
+  (let [mid-point (average neg-point pos-point)]
+    (if (close-enough? neg-point pos-point 0.001)
+      mid-point
+      (let [test-value (f mid-point)]
+	(cond (pos? test-value) (search f neg-point mid-point)
+	      (neg? test-value) (search f mid-point pos-point)
+	      :else mid-point)))))
+
+(defn half-interval-method [f a b]
+  (let [a-val (f a)
+	b-val (f b)]
+    (cond (and (neg? a-val) (pos? b-val)) (search f a b)
+	  (and (pos? a-val) (neg? b-val)) (search f b a)
+	  :else (str "values are not of opposite sign"))))
+
+(comment
+  (half-interval-method #(Math/sin %) 2.0 4.0)
+  ;;=> 3.14111328125
+  (half-interval-method (fn [x] (- (* x x x) (* 2 x) 3)) 1.0 2.0)
+  ;;=> 1.89306640625
+)
+
+;;; fixed point of a function
+(defn fixed-point [f guess]
+  (let [next (f guess)]
+    (if (close-enough? next guess 0.00001)
+      next
+      (fixed-point f next))))
+
+(comment
+(fixed-point #(Math/cos %) 1.0)
+;;;=> 0.7390822985224024
+(fixed-point #(+ (Math/cos %) (Math/sin %)) 1.0)
+;;;=> 1.2587315962971173
+)
+
+;; sqrt as fixed point of y/x
+(defn mysqrt [x]
+  (fixed-point (fn [y] (average y (/ x y)))
+	       1.0))
+
+(comment
+(mysqrt 10)
+;;;=> 3.162277660168379
+(mysqrt 4)
+;;;=> 2.000000000000002
+)

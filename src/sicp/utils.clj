@@ -35,6 +35,9 @@
     a
     (gcd b (rem a b))))
 
+(defn average [a b]
+  (/ (+ a b) 2.0))
+
 (defmacro microbench
   " Evaluates the expression n number of times, returning the average
     time spent in computation, removing highest and lowest values.

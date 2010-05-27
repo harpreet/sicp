@@ -4,7 +4,7 @@
 	[sicp ch1_3]
 	[sicp ex1_42]))
 
-(defn repeated-1 [f1 f2 m]
+(defn- repeated-1 [f1 f2 m]
   (cond (= m 0) f1
 	(= m 1) f2
 	:else (repeated-1 f1 (compose f2 f1) (- m 1))))

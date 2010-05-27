@@ -35,8 +35,9 @@
     a
     (gcd b (rem a b))))
 
-(defn average [a b]
-  (/ (+ a b) 2.0))
+(defn average [ & coll]
+  (/ (reduce + coll)
+     (float (count coll))))
 
 (defmacro microbench
   " Evaluates the expression n number of times, returning the average

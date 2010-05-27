@@ -93,3 +93,40 @@
 (mysqrt 4)
 ;;;=> 2.000000000000002
 )
+
+;; section 1.3.4
+(defn average-damp [f]
+  (fn [x] (average x (f x))))
+
+(defn new-sqrt [x]
+  (fixed-point (average-damp (fn [y] (/ x y)))
+	       1.0))
+
+(defn new-cuberoot [x]
+  (fixed-point (average-damp (fn [y] (/ x (square y))))
+	       1.0))
+
+;; newton's method of root finding
+;; values of x for which g(x) = 0 is the same as
+;; fixed point of f(x) where f(x) = x - g(x)/Dg(x)
+;; where Dg(x) is the derivative of g(x)
+
+(def dx 0.00001)
+
+(defn deriv [g]
+  (fn [x] (/ (- (g (+ x dx))
+		(g x))
+	     dx)))
+
+(defn newton-transform [g]
+  (fn [x] (- x
+	     (/ (g x)
+		((deriv g) x)))))
+
+(defn newton-method [g guess]
+  (fixed-point (newton-transform g)
+	       1.0))
+
+(defn newton-sqrt [x]
+  (newton-method (fn [y] (- (square y) x))
+		 1.0))

@@ -6,6 +6,18 @@
 (defn doub [f]
   (fn [x] (f (f x))))
 
+(deftest test-doub-doub-doub-inc-5
+  (is (= (((doub (doub doub)) inc) 5)
+	 21)))
+
+(deftest test-doub-inc-1
+  (is (= ((doub inc) 1)
+	 3)))
+
+(deftest test-doub-doub-inc-1
+  (is (= (((doub (doub doub)) inc) 1)
+	 17)))
+
 (comment
 (((doub (doub doub)) inc) 5)
 ;;=> 21

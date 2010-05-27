@@ -6,9 +6,17 @@
 (defn compose [f g]
   (fn [x] (f (g x))))
 
+
+(deftest test-compose-square-of-inc-of-6
+  (is (= ((compose square inc) 6)
+	 49)))
+
+(deftest test-compose-square-of-square-of-2
+  (is (= ((compose square square) 2)
+	 16)))
+
 (comment
-((compose square inc) 6)
-;;=> 49
-((compose square square) 2)
-;;=> 16
+;; from repl do
+  (use 'sicp.ex1_42 :reload)
+  (run-tests 'sicp.ex1_42)
  )

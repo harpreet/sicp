@@ -12,3 +12,10 @@
 (defn repeated [f n]
   (repeated-1 f (compose f f) (- n 1)))
 
+(deftest test-repeated-square-twotimes-of-5
+  (is (= ((repeated square 2) 5)
+	 625)))
+
+(deftest test-repeated-square-twotimes-of-2
+  (is (= ((repeated square 2) 2)
+	 16)))

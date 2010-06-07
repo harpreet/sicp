@@ -39,6 +39,9 @@
   (/ (reduce + coll)
      (float (count coll))))
 
+(defn approx-equal [x y]
+  (< (abs (- x y)) 0.00001))
+
 (defmacro microbench
   " Evaluates the expression n number of times, returning the average
     time spent in computation, removing highest and lowest values.

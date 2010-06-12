@@ -2,6 +2,8 @@
   (:use [sicp utils]
 	[clojure.contrib test-is]))
 
+
+;; 2.1.1
 (declare make-rat numer denom)
 
 (defn add-rat [x y]
@@ -41,3 +43,18 @@
 
 (defn print-rat [x]
   (println (numer x)"/"(denom x)))
+
+;;; 2.1.3
+;; scheme/CL cons is nothing but a way to represent a pair.
+(defn s-cons [x y]
+  (fn [m] (cond (= m 0) x
+		(= m 1) y
+		:else (str "argument not 0 or 1 - s-cons"))))
+
+(defn car [z] (z 0))
+
+(defn cdr [z] (z 1))
+
+(def x (s-cons 2 3))
+(car x) ;;=> 2
+(cdr x) ;;=> 3

@@ -60,3 +60,11 @@
 ;; <http://en.wikipedia.org/wiki/Church_encoding#Computation_with_Church_numerals>
 
 ;; comments?
+
+(defn church-to-numeral [chfn]
+  ((chfn inc) 0))
+
+(deftest test-church-to-numeral
+  (are [x y] [= x y]
+       (church-to-numeral one) 1
+       (church-to-numeral two) 2))

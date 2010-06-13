@@ -44,5 +44,26 @@
 ;; -   -   -   +
 ;; -   -   -   -
 
-
-;; too boring a problem. Skipping the rest of it.
+(defn new-mul-interval [x y]
+  (let [l1 (lower-bound x)
+	u1 (upper-bound x)
+	l2 (lower-bound y)
+	u2 (upper-bound y)
+	sl1? (pos? l1)
+	su1? (pos? u1)
+	sl2? (pos? l2)
+	su2? (pos? u2)]
+    (cond (and sl1? su1? sl2? su2?)             (make-interval (* l1 l2) (* u1 u2))
+	  (and sl1? su1? (not sl2?) su2?)       (make-interval (* u1 l2) (* u1 u2))
+	  (and sl1? su1? (not sl2?) (not su2?)) (make-interval (* u1 l2) (* u2 l1))
+	  (and (not sl1?) su1? sl2? su2?)       (make-interval (* l1 u2) (* u1 u2))
+	  (and (not sl1?) su1? (not sl2?) (not su2?)) (make-interval (* u1 l2) (* l1 l2))
+	  (and (not sl1?) (not su1?) sl2? su2?) (make-interval (* l1 u2) (* u1 l2))
+	  (and (not sl1?) (not su1?) (not sl2?) su2?) (make-interval (* l1 u2) (* l1 l2))
+	  (and (not sl1?) (not su1?) (not sl2?) (not su2?)) (make-interval (* u1 u2) (* l1 l2))
+	  (and (not sl1?) su1? (not sl2?) su2?) (let [p1 (* l1 l2)
+						      p2 (* l1 u2)
+						      p3 (* u1 l2)
+						      p4 (* u1 u2)]
+						  (make-interval (min p1 p2 p3 p4)
+								 (max p1 p2 p3 p4))))))

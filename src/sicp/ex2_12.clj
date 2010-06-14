@@ -3,9 +3,8 @@
 	[clojure.test]))
 
 (defn make-center-percent [c p]
-  (let [u (+ c (* c p 0.01))
-	l (- c (* c p 0.01))]
-    (make-interval l u)))
+  (let [w (* c p 0.01)]
+    (make-center-width c w)))
 
 (defn percentage [i]
   (let [c (center i)

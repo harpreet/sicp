@@ -5,8 +5,8 @@
 (defn make-interval [x y]
   (list x y))
 
-(defn upper-bound [i]
+(defn lower-bound [i]
   (first i))
 
-(defn lower-bound [i]
+(defn upper-bound [i]
   (first (rest i)))

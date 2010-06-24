@@ -24,6 +24,20 @@
     (cons x (calc-parity even? xs '()))
     (cons x (calc-parity odd? xs '()))))
 
+(defn- calc-parity-3 [pred xs]
+  (if (empty? xs)
+    nil
+    (let [a (first xs)
+	t (pred a)]
+      (if t
+	(cons a (calc-parity-3 pred (rest xs)))
+	(calc-parity-3 pred (rest xs))))))
+
+(defn same-parity-3 [x & xs]
+  (if (even? x)
+    (cons x (calc-parity-3 even? xs))
+    (cons x (calc-parity-3 odd? xs))))
+
 (deftest test-same-parity
   (are [x y] [= x y]
        (same-parity 1 2 3 4 5 6 7) (list 1 3 5 7)
@@ -33,3 +47,8 @@
   (are [x y] [= x y]
        (same-parity-2 1 2 3 4 5 6 7) (list 1 3 5 7)
        (same-parity-2 2 3 4 5 6 7) (list 2 4 6)))
+
+(deftest test-same-parity-3
+  (are [x y] [= x y]
+       (same-parity-3 1 2 3 4 5 6 7) (list 1 3 5 7)
+       (same-parity-3 2 3 4 5 6 7) (list 2 4 6)))

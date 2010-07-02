@@ -60,3 +60,32 @@
 
 (append one-thru-four one-thru-four)
 ;;=> (1 2 3 4 1 2 3 4)
+
+;; mapping over lists
+(defn scale-list [items factor]
+  (if (empty? items)
+    nil
+    (cons (* factor (first items))
+	  (scale-list (rest items) factor))))
+
+(defn map [proc items]
+  (if (empty? items)
+    nil
+    (cons (proc (first items))
+	  (map proc (rest items)))))
+
+(defn scale-list-with-map [items factor]
+  (map (fn [item] (* item factor)) items))
+
+;; 2.2.2
+(def x (cons (list 1 2) (list 3 4)))
+
+(length x)
+;;=> 3
+
+;; count-leaves
+(defn count-leaves [coll]
+  (cond (nil? coll)       0
+	(not (seq? coll)) 1
+	:else (+ (count-leaves (first coll))
+		 (count-leaves (next coll)))))

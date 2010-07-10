@@ -1,11 +1,12 @@
 (ns sicp.ex2_18
-  (:use [clojure test]))
+  (:use [clojure test])
+  (:refer-clojure :exclude (reverse)))
 
-(defn turn-around-1 [lst]
+(defn reverse-1 [lst]
   (reduce #(cons %2 %1) '() lst))
 
 
-(defn turn-around-2 [lst]
+(defn reverse-2 [lst]
   (let [reverse (fn [lst1 lst2]
 		  (if (empty? lst1)
 		    lst2
@@ -13,12 +14,19 @@
     (reverse lst '())))
 
 
-(deftest test-turn-around-1
-  (are [x y] [= x y]
-       (turn-around-1 (list 1 2 3 4)) (list 4 3 2 1)
-       (turn-around-1 (list 1 4 9 16 25)) (list 25 16 9 4 1)))
+(defn reverse-3 [lst]
+  (if (empty? lst)
+    nil
+    (cons (last lst) (reverse-3 (butlast lst)))))
 
-(deftest test-turn-around-2
+(deftest test-reverse-1
   (are [x y] [= x y]
-       (turn-around-2 (list 1 2 3 4)) (list 4 3 2 1)
-       (turn-around-2 (list 1 4 9 16 25)) (list 25 16 9 4 1)))
+       (reverse-1 (list 1 2 3 4)) (list 4 3 2 1)
+       (reverse-1 (list 1 4 9 16 25)) (list 25 16 9 4 1)
+       (reverse-1 (list (list 1 2) (list 3 4))) (list (list 3 4) (list 1 2))))
+
+(deftest test-reverse-2
+  (are [x y] [= x y]
+       (reverse-2 (list 1 2 3 4)) (list 4 3 2 1)
+       (reverse-2 (list 1 4 9 16 25)) (list 25 16 9 4 1)
+       (reverse-1 (list (list 1 2) (list 3 4))) (list (list 3 4) (list 1 2))))

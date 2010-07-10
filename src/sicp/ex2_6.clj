@@ -44,6 +44,17 @@
 ;; similarly the other examples.
 
 ;; Definition of an add operator
+;; To do m + n, we should have a function which is applied f, n+m times.
+;;
+;; i.e.
+;;
+;; (m f) = takes a function f and composes a new function which composes
+;; f, m times and applies this new function to x.
+;; 
+;; (lambda (f) (lambda (x) ((m f) ((n f) x)))) will create this new
+;; function which compose a given function n+m times and hence is equiv
+;; to addition of m+n. Some simple repl experiments seem to verify the
+;; result.
 (defn add [m n]
   (fn [f] (fn [x]
 	    ((m f) ((n f) x)))))
@@ -52,6 +63,12 @@
 (((add one two) inc) 1)
 ;;=> 4  
 )
+
+;; another definition of add is this:
+;; m + n == (m + [1 + 1 + 1 + ... ]
+(defn new-add [m n]
+  ((m add-1) n))
+
 ;; continueing the same logic, (add one two) => three
 ;; and inc applied three times to 1 is 4. This proves
 ;; that our definition of add is correct.
@@ -68,3 +85,21 @@
   (are [x y] [= x y]
        (church-to-numeral one) 1
        (church-to-numeral two) 2))
+
+;; church to roman: func to integer
+(defn church-to-roman [f]
+  ((f (fn [x] (+ x 1))) 0))
+
+;; integer to func
+(defn roman-to-church [n]
+  (fn [f] (fn [x] (first (drop n (take (inc n) (iterate f x)))))))
+
+(defn church [n]
+  (loop [n n cf (fn [f] (fn [x] x))]
+    (if (zero? n)
+      cf
+      (recur (- n 1) (fn [f] (fn [x]
+			       (f ((cf f) x))))))))
+
+(defn unchurch [f]
+  ((f (fn [x] (+ x 1))) 0))

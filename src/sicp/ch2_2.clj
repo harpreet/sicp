@@ -1,4 +1,5 @@
-(ns sicp.ch2_2)
+(ns sicp.ch2_2
+  (:refer-clojure :exclude (map)))
 
 (cons 1
       (cons 2
@@ -89,3 +90,18 @@
 	(not (seq? coll)) 1
 	:else (+ (count-leaves (first coll))
 		 (count-leaves (next coll)))))
+
+;; mapping over trees
+(defn scale-tree [tree factor]
+  (cond (nil? tree) nil
+	(not (seq? tree)) (* tree factor)
+	:else (cons (scale-tree (first tree) factor)
+		    (scale-tree (next tree) factor))))
+
+;; using map
+(defn scale-tree-with-map [tree factor]
+  (map (fn [sub-tree]
+	 (if (seq? sub-tree)
+	   (scale-tree-with-map sub-tree factor)
+	   (* sub-tree factor)))
+       tree))

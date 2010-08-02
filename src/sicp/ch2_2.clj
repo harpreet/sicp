@@ -1,6 +1,7 @@
 (ns sicp.ch2-2
   (:refer-clojure :exclude (map))
-  (:use (sicp [ch1-2 :only (fib)])))
+  (:use [sicp [ch1-2 :only (fib)]]
+        [clojure.test]))
 
 (cons 1
       (cons 2
@@ -156,3 +157,52 @@
      (if (> low high)
        nil
        (cons low (enumerate-interval (+ low 1) high)))))
+
+;; same as flatten/fringe
+(defn enumerate-tree [tree]
+  (cond (nil? tree) nil
+        (not (seq? tree)) (list tree)
+        :else (concat (enumerate-tree (first tree))
+                      (enumerate-tree (next tree)))))
+
+(defn square [x] (* x x))
+
+;; define sum of odd squares in terms of myfilter-2, enumerate, accumulate
+(defn sum-of-odd-squares [tree]
+  (->> tree
+       (enumerate-tree)
+       (filter odd?)
+       (map square)
+       (accumulate + 0)))
+
+(deftest test-sum-of-odd-squares
+  (is [= (sum-of-odd-squares '((1) (2) (3 4) ((5) (((6) (7)) (8)))))
+         (reduce + (map #(* % %) (filter odd? (range 1 9))))]))
+
+(defn even-fibs-new [n]
+  (->> n
+       (enumerate-interval ,,,)
+       (map fib ,,,)
+       (filter even? ,,,)
+       (accumulate cons nil ,,,)))
+
+(defn list-fib-squares [n]
+  (->> n
+       (enumerate-interval ,,,)
+       (map fib ,,,)
+       (map square ,,,)
+       (accumulate cons nil ,,,)))
+
+(defn product-of-squares-of-odd-elements [sequence]
+  (accumulate *
+              1
+              (map square
+                   (filter odd? sequence))))
+
+;; note how beautiful and clear the clojure ->> macro is!
+(defn product-of-squares-of-odd-elements [sequence]
+  (->> sequence
+       (filter odd? ,,,)
+       (map square ,,,)
+       (accumulate * 1 ,,,)))
+

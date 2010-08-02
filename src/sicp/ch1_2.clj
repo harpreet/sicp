@@ -1,5 +1,5 @@
 (ns sicp.ch1-2
-  (:use [sicp utils]
+  (:use [sicp.utils :only (square)]
 	[clojure.contrib.math :only (sqrt expt)]
 	[clojure.contrib.trace :only (dotrace)]))
 
@@ -166,19 +166,20 @@
     (mygcd b (rem a b))))
 
 ;;; section 1.2.6 Primality testing.
-(defn prime? [n]
-  (= (smallest-divisor n) n))
-
-(defn smallest-divisor [n]
-  (find-divisor n 2))
+(defn divides? [a b]
+  (= (rem b a) 0))
 
 (defn find-divisor [n test-divisor]
   (cond (> (square test-divisor)  n) n
 	(divides? test-divisor n) test-divisor
 	:else (find-divisor n (inc test-divisor))))
 
-(defn divides? [a b]
-  (= (rem b a) 0))
+(defn smallest-divisor [n]
+  (find-divisor n 2))
+
+(defn prime? [n]
+  (= (smallest-divisor n) n))
+
 
 ;; fermat's little theorem
 (defn expmod [base exp m]
@@ -188,11 +189,11 @@
 	:else (rem (* base (expmod base (dec exp) m))
 		   m)))
 
-(defn fermat-test [n]
-  (try-it (+ 1 (rand-int (- n 1))) n))
-
 (defn try-it [a n]
   (= a (expmod a n n)))
+
+(defn fermat-test [n]
+  (try-it (+ 1 (rand-int (- n 1))) n))
 
 (defn fast-prime? [n times]
   (cond (= times 0) true

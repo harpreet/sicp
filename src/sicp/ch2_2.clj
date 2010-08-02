@@ -1,5 +1,6 @@
-(ns sicp.ch2_2
-  (:refer-clojure :exclude (map)))
+(ns sicp.ch2-2
+  (:refer-clojure :exclude (map))
+  (:use (sicp [ch1-2 :only (fib)])))
 
 (cons 1
       (cons 2
@@ -105,3 +106,53 @@
 	   (scale-tree-with-map sub-tree factor)
 	   (* sub-tree factor)))
        tree))
+
+;;; 2.2.3
+(defn sum-odd-squares [tree]
+  (cond (nil? tree) 0
+	(not (seq? tree)) (if (odd? tree)
+			    ((fn [x] (* x x)) tree)
+			    0)
+	:else (+ (sum-odd-squares (first tree))
+		 (sum-odd-squares (next tree)))))
+
+(defn even-fibs [n]
+  (letfn [(next-fib [k]
+		    (if (> k n)
+		      nil
+		      (let [f (fib k)]
+			(if (even? f)
+			  (cons f (next-fib (+ k 1)))
+			  (next-fib (+ k 1))))))]
+    (next-fib 0)))
+
+(map #(* % %) (list 1 2 3 4 5))
+
+(defn myfilter-1 [pred? xs]
+  (cond (nil? xs) nil
+	(not (seq? xs)) (if (pred? xs)
+			  (list xs)
+			  ())
+	:else (concat (myfilter-1 pred? (first xs))
+		      (myfilter-1 pred? (next xs)))))
+
+(defn myfilter-2 [pred? xs]
+  (cond (nil? xs) nil
+	(pred? (first xs)) (cons (first xs)
+				 (myfilter-2 pred? (next xs)))
+	:else (myfilter-1 pred? (next xs))))
+
+;; accumulate
+(defn accumulate [op init xs]
+  (if (nil? xs)
+    init
+    (op (first xs)
+	(accumulate op init (next xs)))))
+
+(defn enumerate-interval
+  ([high]
+     (enumerate-interval 0 high))
+  ([low high]
+     (if (> low high)
+       nil
+       (cons low (enumerate-interval (+ low 1) high)))))

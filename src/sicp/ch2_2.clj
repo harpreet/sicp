@@ -1,6 +1,6 @@
 (ns sicp.ch2-2
-  (:refer-clojure :exclude (map))
-  (:use [sicp [ch1-2 :only (fib)]]
+  (:refer-clojure :exclude (map remove))
+  (:use [sicp [ch1-2 :only (fib prime?)]]
         [clojure.test]))
 
 (cons 1
@@ -206,3 +206,44 @@
        (map square ,,,)
        (accumulate * 1 ,,,)))
 
+;; nested mapping
+(accumulate append
+            nil
+            (map (fn [i]
+                   (map (fn [j] (list i j))
+                        (enumerate-interval 1 (- i 1))))
+                 (enumerate-interval 1 6)))
+
+(defn flatmap [proc xs]
+  (accumulate append nil (map proc xs)))
+
+(defn prime-sum? [pair]
+  (prime? (+ (first pair)
+             (first (rest pair)))))
+
+;;; create the triple (i,j,sum)
+(defn make-pair-sum [pair]
+  (list (first pair)
+        (first (rest pair))
+        (+ (first pair)
+           (first (rest pair)))))
+
+(defn prime-sum-pairs [n]
+  (map make-pair-sum 
+       (filter prime-sum?
+               (flatmap (fn [i]
+                          (map (fn [j] (list i j))
+                               (enumerate-interval 1 (- i 1))))
+                        (enumerate-interval 1 n)))))
+
+;;; permutations
+(defn remove [item sequence]
+  (filter (fn [x] (not= item x)) sequence))
+
+(defn permutations [s]
+  (if (empty? s)
+    (list nil)
+    (flatmap (fn [x]
+               (map (fn [p] (cons x p))
+                    (permutations (remove x s))))
+             s)))
